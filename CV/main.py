@@ -10,12 +10,13 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import time
+import csv
 
 # ─── Parameters ───────────────────────────────────────────────────────────────
 
 FRAME_W, FRAME_H   = 640, 480
 
-THREAT_DIST_PX     = 50    # how close the hand’s path must come to rod
+THREAT_DIST_PX     = 150    # how close the hand’s path must come to rod
 DODGE_DIST_PX      = 100   # length of dodge-vector for direction calc
 
 ALPHA              = 0.7   # velocity smoothing factor
@@ -69,12 +70,34 @@ def dodge_direction(vec):
     elif dy < 0:    dirs.append("up")
     return "-".join(dirs) if dirs else "none"
 
+# def find_impact_frame(logs, threat_dist):
+#     """
+#     logs: list of dicts with keys "frame" and "distance"
+#     threat_dist: numeric threshold
+#     returns: integer frame index of first impact
+#     """
+#     for entry in logs:
+#         dist = entry["distance"]
+#         if dist is not None and dist <= threat_dist:
+#             return entry["frame"]
+#     raise ValueError("No impact frame found: hand never crossed threshold")
+
+# def find_detection_frame(logs):
+#     """
+#     logs: list of dicts with keys "frame", "threat" (bool), "dodge_mag" (float)
+#     returns: integer frame index of first dodge decision
+#     """
+#     for entry in logs:
+#         if entry["threat"] and entry["dodge_mag"] > 0:
+#             return entry["frame"]
+#     raise ValueError("No dodge decision found")
+
 # ─── Main Loop ────────────────────────────────────────────────────────────────
 
 def main():
     cap = cv2.VideoCapture(0)
-    # cap.set(cv2.CAP_PROP_FRAME_WIDTH,  FRAME_W)
-    # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_H)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH,  FRAME_W)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_H)
 
     mp_hands = mp.solutions.hands
     hands    = mp_hands.Hands(
@@ -86,8 +109,13 @@ def main():
 
     last_c, last_t, v_prev = None, None, np.zeros(2, float)
 
+    frame_idx = 0
+    logs = []  # list of dicts: one entry per frame
+
     print("▶ Press 'q' to quit")
     while True:
+        # frame_idx += 1
+
         ret, frame = cap.read()
         if not ret:
             break
@@ -135,6 +163,14 @@ def main():
                                 tuple(end_d),
                                 (0,0,255), 2, tipLength=0.3)
                 print(dodge_direction(dodge))
+            
+            dist_to_rod = np.linalg.norm(ROD_POS - center) if center is not None else None
+            # logs.append({
+            # "frame":      frame_idx,
+            # "distance":   dist_to_rod,
+            # "threat":     bool(threat),
+            # "dodge_mag":  float(np.linalg.norm(dodge)),
+            # })
 
             # update history
             last_c, last_t, v_prev = center.copy(), now, v.copy()
@@ -146,6 +182,16 @@ def main():
         cv2.imshow("Hand Dodge Direction", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+    
+    # with open("dodge_log.csv", "w", newline="") as f:
+    #     writer = csv.DictWriter(f, fieldnames=["frame","distance","threat","dodge_mag"])
+    #     writer.writeheader()
+    #     writer.writerows(logs)
+
+    # F_impact = find_impact_frame(logs, THREAT_DIST_PX)
+    # F_detect = find_detection_frame(logs)
+    # lead_frames = F_impact - F_detect
+    # print(F_impact, F_detect, lead_frames)
 
     cap.release()
     cv2.destroyAllWindows()
