@@ -1,9 +1,4 @@
-
-
-# Necessary packages:
-pip install opencv-python mediapipe numpy
-
-# WebPad
+# Automatic Turkish Ice Cream Man (ATICM)
 
 Design using servo motors and computer vision model to track approaching hands and dodge them.
 
