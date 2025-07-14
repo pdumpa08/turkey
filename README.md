@@ -2,3 +2,5 @@ Computer Vision model to track approaching hands and provide dodge vectors. Uses
 
 # Necessary packages:
 pip install opencv-python mediapipe numpy
+
+More info coming!
