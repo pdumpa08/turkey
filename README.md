@@ -4,6 +4,9 @@ Design using servo motors and computer vision model to track approaching hands a
 
 <img src=assets/full.png alt="full Machine" width="500"/>
 
+[Demo video](https://www.youtube.com/shorts/_B0X4ihoTbQ)
+
+
 ## Features:
 - 3D printed case
 - Full 2D range of motion
