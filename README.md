@@ -26,7 +26,7 @@ The rod is a quarter inch round dowel, attached to the CAD model with hot glue. 
 ## Electronics:
 Below is our circuit schematic. We designed the schematic to streamline the necessary transfer of power and signals to each of the parts. Basic connection techniques like soldering and breadboards/perfboards were used. After a little research, we found that using electrical tape improved safety and conductivity. In the schematic, you can see the specific parts we used.
 
-<img src=assets/schematic.png alt="Schematic" width="500"/>
+<img width="1081" height="675" alt="image" src="https://github.com/user-attachments/assets/f39321a2-ca8c-4753-b003-9c3b7a20153b" />
 
 ## Computer Vision (CV):
 We built a computer vision model that processes video inputs from a HD webcam using OpenCV and then processes that video stream with Google's MediaPipe library, allowing us to detect and track hands in each of the frames. This information is then sent along to the firmware to control the motors.
