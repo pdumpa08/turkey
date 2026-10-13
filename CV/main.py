@@ -12,7 +12,7 @@ import numpy as np
 import time
 import csv
 
-# ─── Parameters ───────────────────────────────────────────────────────────────
+# ─── Parameters ──
 
 FRAME_W, FRAME_H   = 640, 480
 
@@ -27,7 +27,7 @@ MAX_RED_DODGE_MAG  = 10
 # rod at frame center
 ROD_POS = np.array([335, 225])
 
-# ─── Helper Functions ─────────────────────────────────────────────────────────
+# ─── Helper Functions ──
 
 def palm_center(landmarks, w, h):
     pts = np.array([
@@ -92,7 +92,7 @@ def dodge_direction(vec):
 #             return entry["frame"]
 #     raise ValueError("No dodge decision found")
 
-# ─── Main Loop ────────────────────────────────────────────────────────────────
+# ─── Main Loop ───
 
 def main():
     cap = cv2.VideoCapture(0)
