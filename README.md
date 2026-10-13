@@ -1,4 +1,4 @@
-# Automatic Turkish Ice Cream Man (ATICM).  
+# Automatic Turkish Ice Cream Man (ATICM)
 Built in 48 hours.
 
 Design using servo motors and computer vision model to track approaching hands and dodge them.
